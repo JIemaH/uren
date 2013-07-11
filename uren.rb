@@ -7,6 +7,7 @@ require_relative "lib/reporter"
 
 week_from  = Week.new(2013, 1)
 week_until = Week.new(2013, 35)
+hours_per_week = 16
 
 $stdout.sync = true
 
@@ -38,5 +39,5 @@ print "Processing events..."
 puts "DONE"
 
 print "Writing report..."
-  Reporter.from_events(events).print("report.html")
+  Reporter.from_events(events, hours_per_week).print("report.html")
 puts "DONE. Written to ./report.html"

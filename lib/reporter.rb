@@ -65,7 +65,7 @@ class Reporter
     th.title { width:80em; }
   EOCSS
 
-  def self.from_events(events)
+  def self.from_events(events, hours_per_week)
     # Group into weeks
     raw_weeks = events.group_by { |evt| [evt.start_time.cwyear, evt.start_time.cweek] }
 
@@ -75,11 +75,12 @@ class Reporter
       weeks[week] = raw_weeks[[week.year, week.number]] || []
     end
 
-    Reporter.new(weeks)
+    Reporter.new(weeks, hours_per_week)
   end
 
-  def initialize weeks
+  def initialize weeks, hours_per_week
     @weeks = weeks
+    @hours_per_week = hours_per_week
   end
 
   def print(file)
@@ -94,8 +95,10 @@ class Reporter
     end
   end
 
+protected
+
   def print_overview report
-    work_per_week     = Duration.new(16 * 60 * 60)
+    work_per_week     = Duration.new(@hours_per_week * 60 * 60)
     total_should_work = Duration.new(0)
     total_worked      = Duration.new(0)
 
