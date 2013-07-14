@@ -136,8 +136,7 @@ protected
     report.puts " <th>#{total_should_work}</th>"
     report.puts " <th>#{total_worked}</th>"
     diff = total_worked - total_should_work
-    diffd = (diff.hours.to_f + (diff.minutes.to_f / 60)) / 8.0
-    report.puts " <th>%s (%0.5s dagen)</th>" % [diff, diffd]
+    report.puts " <th>%s (%0.5s dagen)</th>" % [diff, diff.days_fraction]
 
     report.puts "</table>"
     report.puts "</div>"

@@ -29,6 +29,10 @@ class Duration
     minutes = (@duration - (hours * 60 * 60)) / 60
   end
 
+  def days_fraction
+    (hours.to_f + (minutes.to_f / 60)) / 8.0
+  end
+
   def +(other)
     raise("Other should also be duration") unless other.kind_of?(Duration)
 
