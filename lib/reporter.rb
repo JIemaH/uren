@@ -101,6 +101,7 @@ protected
     work_per_week     = Duration.new(@hours_per_week * 60 * 60)
     total_should_work = Duration.new(0)
     total_worked      = Duration.new(0)
+    cumulative_diff   = Duration.new(0)
 
     report.puts "<div id='total'>"
     report.puts "<h1>Overview</h1>"
@@ -111,20 +112,22 @@ protected
     report.puts " <th>Should</th>"
     report.puts " <th>Did</th>"
     report.puts " <th>Diff</th>"
+    report.puts " <th>Cum. Diff</th>"
     report.puts "</tr>"
 
     @weeks.each do |week, events|
       worked_in_week = sum_event_durations(events)
+      cumulative_diff = cumulative_diff + worked_in_week - work_per_week
 
       total_should_work += work_per_week
       total_worked += worked_in_week
-      link =
       report.puts "<tr>"
       report.puts " <td>#{week.year}</td>"
       report.puts " <td>#{week.number}</td>"
       report.puts " <td>#{work_per_week}</td>"
       report.puts " <td>#{worked_in_week}</td>"
       report.puts " <td>#{worked_in_week - work_per_week}</td>"
+      report.puts " <td>#{cumulative_diff}</td>"
       report.puts " <td><a href='##{anchor_for(week)}'>Details</a></td>"
       report.puts "</tr>"
     end
@@ -133,8 +136,8 @@ protected
     report.puts " <th>#{total_should_work}</th>"
     report.puts " <th>#{total_worked}</th>"
     diff = total_worked - total_should_work
-    diffd = diff.hours.to_f / 8.0
-    report.puts " <th>#{diff} (#{diffd} dagen)</th>"
+    diffd = (diff.hours.to_f + (diff.minutes.to_f / 60)) / 8.0
+    report.puts " <th>%s (%0.5s dagen)</th>" % [diff, diffd]
 
     report.puts "</table>"
     report.puts "</div>"
