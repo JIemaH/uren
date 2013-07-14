@@ -65,7 +65,7 @@ class Reporter
     th.title { width:80em; }
   EOCSS
 
-  def self.from_events(events, hours_per_week)
+  def self.from_events(week_from, week_until, events, hours_per_week)
     # Group into weeks
     raw_weeks = events.group_by { |evt| [evt.start_time.cwyear, evt.start_time.cweek] }
 

@@ -39,5 +39,5 @@ print "Processing events..."
 puts "DONE"
 
 print "Writing report..."
-  Reporter.from_events(events, hours_per_week).print("report.html")
+  Reporter.from_events(week_from, week_until, events, hours_per_week).print("report.html")
 puts "DONE. Written to ./report.html"
