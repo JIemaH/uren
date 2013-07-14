@@ -3,6 +3,7 @@ class Reporter
    #total {
      width: 25%;
      float:right;
+     padding-left: 50px;
    }
    table {
       border:1px solid black;
