@@ -21,7 +21,7 @@ print "Processing events..."
   raw_events.select! do |event|
     title = event.title.downcase
     (event.status == "confirmed" || event.status == "tentative") && \
-    (title.include?("@home") || title.include?("aanwezig"))
+    (title.include?("@home") || title.include?("aanwezig") || title == "vakantie")
   end
 
   # Remove duplicates in time & create pauses
@@ -29,7 +29,9 @@ print "Processing events..."
   raw_events.each do |event|
     if !events.include?(event)
       events << event
-      if (event.duration.hours >= 4)
+      if event.title.downcase == 'vakantie'
+        event.type = :holiday
+      elsif (event.duration.hours >= 4)
         pause_start = DateTime.commercial(event.start_time.cwyear, event.start_time.cweek, event.start_time.cwday, 12, 00)
         pause_end   = DateTime.commercial(event.start_time.cwyear, event.start_time.cweek, event.start_time.cwday, 12, 45)
         events << Event.new("pauze", "confirmed", pause_start, pause_end, :pause)

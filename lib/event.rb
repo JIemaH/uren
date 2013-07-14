@@ -1,5 +1,5 @@
 class Event
-  attr_reader :title, :status, :start_time, :end_time, :type
+  attr_accessor :title, :status, :start_time, :end_time, :type
 
   def initialize(title, status, start_time, end_time, type = :work)
     @type = type

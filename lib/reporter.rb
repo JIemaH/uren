@@ -88,8 +88,10 @@ class Reporter
       report.puts "<html>"
       report.puts "<head><style>#{CSS}</style></head>"
       report.puts "<body>"
+      report.puts "The table of <a href='#holidays'>holidays</a> is at the bottom of this page"
       print_overview(report)
       print_by_week(report)
+      print_holidays(report)
       report.puts "</body>"
       report.puts "</html>"
     end
@@ -178,6 +180,44 @@ protected
     report.puts "<tr>"
     report.puts " <th colspan='4'>Totaal</td>"
     report.puts " <td colspan='2'>#{total_duration.to_s}</td>"
+    report.puts "</tr>"
+
+    report.puts "</table>"
+  end
+
+  def print_holidays(report)
+    all_events = @weeks.values.flatten
+    holiday_events = all_events.select { |event| event.type == :holiday }
+    report.puts "<h1 id='holidays'>Holidays</h1>"
+    report.puts "<table>"
+    report.puts "<tr>"
+    report.puts " <th>Year</th>"
+    report.puts " <th>Week</th>"
+    report.puts " <th>Day</th>"
+    report.puts " <th>Date</th>"
+    report.puts " <th>Start</th>"
+    report.puts " <th>End</th>"
+    report.puts " <th>Dur.</th>"
+    report.puts " <th>Title</th>"
+    report.puts "</tr>"
+
+    holiday_events.each do |event|
+      report.puts "<tr class='#{event.title.downcase.split(' ').first}'>"
+      report.puts " <td>#{event.start_time.cwyear}</td>"
+      report.puts " <td>#{event.start_time.cweek}</td>"
+      report.puts " <td>#{event.start_time.strftime("%A")}</td>"
+      report.puts " <td>#{event.start_time.strftime("%Y-%m-%d")}</td>"
+      report.puts " <td>#{event.start_time.strftime("%H:%M")}</td>"
+      report.puts " <td>#{event.end_time.strftime("%H:%M")}</td>"
+      report.puts " <td>#{event.duration.to_s}</td>"
+      report.puts " <td>#{event.title}</td>"
+      report.puts "</tr>"
+    end
+
+    total_duration = sum_event_durations(holiday_events)
+    report.puts "<tr>"
+    report.puts " <th colspan='7'>Total hours</td>"
+    report.puts " <th colspan='2'>%s (%0.5s days)</td>" % [total_duration, total_duration.days_fraction]
     report.puts "</tr>"
 
     report.puts "</table>"
